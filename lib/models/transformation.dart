@@ -19,4 +19,13 @@ class Transformacion {
       ki: json['ki'],
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'image': image,
+      'ki': ki,
+    };
+  }
 }
