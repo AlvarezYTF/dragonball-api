@@ -1,30 +1,24 @@
-import 'character.dart';
-
 class Planeta {
   final int id;
   final String name;
-  final bool isDestroyed;
-  final String description;
   final String image;
-  final List<Personaje> characters;
+  final String description;
 
   Planeta({
     required this.id,
     required this.name,
-    required this.isDestroyed,
-    required this.description,
     required this.image,
-    required this.characters,
+    required this.description,
   });
 
   factory Planeta.fromJson(Map<String, dynamic> json) {
     return Planeta(
-      id: json['id'],
-      name: json['name'],
-      isDestroyed: json['isDestroyed'],
-      description: json['desription'],
-      image: json['image'],
-      characters: json['characters'],
+      id: json['id'] ?? 0,
+      name: json['name'] ?? 'Desconocido',
+      image:
+          json['image'] ??
+          'https://via.placeholder.com/150', // imagen por defecto
+      description: json['description'] ?? 'Sin descripción disponible.',
     );
   }
 }
