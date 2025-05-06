@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'transformations.dart';
+import 'planets_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -16,11 +17,19 @@ class HomeScreen extends StatelessWidget {
           ),
           ListTile(
             title: Text('Planetas'),
-            // onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => PlanetsScreen())),
+            onTap:
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => PlanetsScreen()),
+                ),
           ),
           ListTile(
             title: Text('Transformaciones'),
-            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => TransformacionesPage())),
+            onTap:
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => TransformacionesPage()),
+                ),
           ),
         ],
       ),
