@@ -42,7 +42,7 @@ class _PlanetsScreenState extends State<PlanetsScreen> {
           return GridView.builder(
             padding: const EdgeInsets.all(16),
             gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 220, // Cada tarjeta ocupa hasta este ancho
+              maxCrossAxisExtent: 220,
               mainAxisSpacing: 16,
               crossAxisSpacing: 16,
               childAspectRatio: 0.7,
