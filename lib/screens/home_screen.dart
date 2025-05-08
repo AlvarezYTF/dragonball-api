@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'transformations.dart';
+import 'characters_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -12,7 +13,7 @@ class HomeScreen extends StatelessWidget {
         children: [
           ListTile(
             title: Text('Personajes'),
-            // onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => CharactersScreen())),
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => CharactersScreen())),
           ),
           ListTile(
             title: Text('Planetas'),
