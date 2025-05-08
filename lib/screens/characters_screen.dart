@@ -15,33 +15,44 @@ class _CharactersScreenState extends State<CharactersScreen> {
 
   @override
   void initState() {
-  super.initState();
-  _personajes = ApiService().fetchAllCharacters();
-}
+    super.initState();
+    _personajes = ApiService().fetchAllCharacters();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Personajes')),
-      body: FutureBuilder<List<Personaje>>(
-        future: _personajes,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No hay personajes disponibles.'));
-          }
+      body: SafeArea(
+        child: FutureBuilder<List<Personaje>>(
+          future: _personajes,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return const Center(
+                child: Text('No hay personajes disponibles.'),
+              );
+            }
 
-          final personajes = snapshot.data!;
-          return ListView.builder(
-            itemCount: personajes.length,
-            itemBuilder: (context, index) {
-              return CharacterCard(personaje: personajes[index]);
-            },
-          );
-        },
+            final personajes = snapshot.data!;
+            return GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 0.68,
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12,
+              ),
+              padding: const EdgeInsets.all(12),
+              itemCount: personajes.length,
+              itemBuilder: (context, index) {
+                return CharacterCard(personaje: personajes[index]);
+              },
+            );
+          },
+        ),
       ),
     );
   }

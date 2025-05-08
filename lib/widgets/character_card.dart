@@ -6,41 +6,63 @@ class CharacterCard extends StatelessWidget {
 
   const CharacterCard({super.key, required this.personaje});
 
-  @override
+   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12),
+    return Container(
+      decoration: BoxDecoration(
+        color: const Color(0xFF2C2C2C), // fondo oscuro
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Imagen
+          Expanded(
+            flex: 8,
+            child: Container(
+              padding: const EdgeInsets.all(10),
               child: Image.network(
                 personaje.image,
-                width: 100,
-                height: 100,
-                fit: BoxFit.cover,
+                fit: BoxFit.contain,
               ),
             ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(personaje.name,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 18)),
-                  Text('Raza: ${personaje.race}'),
-                  Text('Ki: ${personaje.ki}'),
-                  Text('Planeta: ${personaje.originPlanet.name.isNotEmpty ? personaje.originPlanet.name : 'N/A'}'),
-                ],
-              ),
+          ),
+          // Contenido inferior
+          Container(
+            padding: const EdgeInsets.all(6),
+            decoration: const BoxDecoration(
+              color: Colors.black87,
+              borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
             ),
-          ],
-        ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  personaje.name,
+                  style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+                const SizedBox(height: 8),
+                Text('Base KI:', style: TextStyle(color: Colors.grey[400])),
+                Text(personaje.ki,
+                    style: const TextStyle(color: Colors.amber)),
+                const SizedBox(height: 4),
+                Text('Total KI:', style: TextStyle(color: Colors.grey[400])),
+                Text(personaje.maxKi,
+                    style: const TextStyle(color: Colors.amber)),
+                const SizedBox(height: 4),
+                Text(
+                  'Affiliation: ${personaje.affiliation}',
+                  style: const TextStyle(color: Colors.amber),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          )
+        ],
       ),
     );
   }
