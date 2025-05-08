@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import '../widgets/dragonballs_loader.dart';
 import '../widgets/floating_dragonball.dart';
 import '../widgets/slicen_dragonball_home.dart';
-import '../widgets/etiqueta_button.dart';
-import '../screens/transformations.dart';
 import '../widgets/tarjeta_prueba.dart';
 
 class HomeScreen extends StatefulWidget {
