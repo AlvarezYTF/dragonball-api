@@ -13,7 +13,7 @@ class HomeScreen extends StatelessWidget {
         children: [
           ListTile(
             title: Text('Personajes'),
-            // onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => CharactersScreen())),
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => CharactersScreen())),
           ),
           ListTile(
             title: Text('Planetas'),
