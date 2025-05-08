@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/transformation.dart';
 import '../services/transformacion_service.dart';
+import '../widgets/dragonballs_loader.dart';
 
 class TransformacionesPage extends StatefulWidget {
   const TransformacionesPage({super.key});
@@ -26,7 +27,14 @@ class _TransformacionesPageState extends State<TransformacionesPage> {
         future: _futureTransformaciones,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+              child: SizedBox(
+                height: 150,
+                child: DragonBallsLoader(
+                  duration: Duration(seconds: 7), // animación continua
+                ),
+              ),
+            );
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
