@@ -11,6 +11,7 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.8
   http: ^1.4.0
+  youtube_player_flutter: ^8.1.1
 
 dev_dependencies:
   flutter_test:
@@ -21,11 +22,21 @@ flutter:
   uses-material-design: true
   assets:
     - assets/logo_dragonballapi.webp
+    - assets/effects/flash1.png
+    - assets/effects/flash2.png
+    - assets/effects/flash3.png
     - assets/images/gogeta.webp
     - assets/images/Shen_Long.webp
     - assets/images/jiren.webp
+    - assets/images/goku_jiren.png
     - assets/images/slider1.webp
     - assets/images/slider2.jpg
+    - assets/images/laterales/slider2_broly.jpg
+    - assets/images/laterales/slider2_goku_black.jpg
+    - assets/images/laterales/slider2_goku4.jpg
+    - assets/images/laterales/slider2_vegeta4.jpg
+    - assets/images/laterales/slider2_ultra.jpg
+    - assets/images/laterales/slider2_vegito.jpg
     - assets/images/slider3.webp
     - assets/images/slider4.webp
     - assets/images/slider5.jpg
