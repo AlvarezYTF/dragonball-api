@@ -1,3 +1,5 @@
+import 'character.dart';
+
 class Planeta {
   final int id;
   final String name;
@@ -17,14 +19,16 @@ class Planeta {
 
   factory Planeta.fromJson(Map<String, dynamic> json) {
     return Planeta(
-      id: json['id'] ?? 0,
-      name: json['name'] ?? 'Desconocido',
-      image:
-          json['image'] ??
-          'https://via.placeholder.com/150', // imagen por defecto
-      description: json['description'] ?? 'Sin descripción disponible.',
-      isDestroyed: json['isDestroyed'] ?? false, // ✅ agregado
-      characters: json['characters'] ?? [],       // ✅ agregado
+      id: json['id'],
+      name: json['name'],
+      isDestroyed: json['isDestroyed'],
+      description: json['description'],
+      image: json['image'],
+      characters:
+          (json['characters'] as List<dynamic>?)
+              ?.map((c) => Personaje.fromJson(c))
+              .toList() ??
+          [],
     );
   }
 }
