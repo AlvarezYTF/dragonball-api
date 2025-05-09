@@ -3,6 +3,7 @@ import '../widgets/dragonballs_loader.dart';
 import '../widgets/floating_dragonball.dart';
 import '../widgets/slicen_dragonball_home.dart';
 import '../widgets/tarjeta_prueba.dart';
+import '../screens/planets_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -163,6 +164,35 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     left: 270,
                     top: 600,
                     animation: _animationFloat,
+                  ),
+                  Positioned(
+                    bottom: 40,
+                    left: MediaQuery.of(context).size.width / 2 - 100,
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.orangeAccent,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 12,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                      icon: const Icon(Icons.public),
+                      label: const Text(
+                        'Ver Planetas',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const PlanetsScreen(),
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ],
               ),
