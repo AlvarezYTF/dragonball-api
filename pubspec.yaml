@@ -48,8 +48,15 @@ flutter:
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
-  # the material Icons class.
+  # the material Icons class. 
   uses-material-design: true
+
+  assets:
+    - assets/logo_dragon.png
+    - assets/logo_dragon_ball.png
+    - assets/logo_esfera.png
+    - assets/logo_estrellas.png
+    - assets/fondo_dragonball.jpg
 
   # To add assets to your application, add an assets section, like this:
   # assets:

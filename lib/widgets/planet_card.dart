@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import '../models/planet.dart';
 import '../screens/planet_detail_screen.dart';
@@ -11,104 +12,96 @@ class PlanetCard extends StatefulWidget {
   State<PlanetCard> createState() => _PlanetCardState();
 }
 
-class _PlanetCardState extends State<PlanetCard> {
-  bool _isHovered = false;
+class _PlanetCardState extends State<PlanetCard>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _orbitAnimation;
 
-  void _onEnter(PointerEvent details) {
-    setState(() => _isHovered = true);
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 10 + Random().nextInt(10)), // aleatoria
+    )..repeat();
+
+    _orbitAnimation = Tween<double>(begin: 0, end: 2 * pi).animate(_controller);
   }
 
-  void _onExit(PointerEvent details) {
-    setState(() => _isHovered = false);
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      onEnter: _onEnter,
-      onExit: _onExit,
-      child: GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => PlanetDetailScreen(planet: widget.planet),
-            ),
-          );
-        },
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          transform: _isHovered
-              ? (Matrix4.identity()..scale(1.03))
-              : Matrix4.identity(),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: _isHovered
-                ? [BoxShadow(color: Colors.black26, blurRadius: 8)]
-                : [],
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => PlanetDetailScreen(planet: widget.planet),
           ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: Stack(
-              children: [
-                Positioned.fill(
-                  child: Image.network(
-                    widget.planet.image,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Colors.black.withOpacity(0.6), Colors.transparent],
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    width: double.infinity,
-                    color: Colors.black.withOpacity(0.6),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 6,
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          widget.planet.name,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        AnimatedOpacity(
-                          opacity: _isHovered ? 1.0 : 0.0,
-                          duration: const Duration(milliseconds: 300),
-                          child: Text(
-                            widget.planet.description,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              color: Colors.white70,
-                              fontSize: 11,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: const Color(0xFF1E1E2C),
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: const Color.fromRGBO(0, 0, 0, 0.6),
+              blurRadius: 8,
+              offset: Offset(0, 4),
             ),
-          ),
+          ],
+        ),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            // Orbita animada
+            AnimatedBuilder(
+              animation: _orbitAnimation,
+              builder: (context, child) {
+                final angle = _orbitAnimation.value;
+                final radius = 30.0;
+
+                return Positioned(
+                  left: 60 + radius * cos(angle),
+                  top: 60 + radius * sin(angle),
+                  child: ClipOval(
+                    child: Image.network(
+                      widget.planet.image,
+                      width: 50,
+                      height: 50,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                );
+              },
+            ),
+
+            // Nombre
+            Positioned(
+              bottom: 8,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: const Color.fromRGBO(0, 0, 0, 0.6),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  widget.planet.name,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
