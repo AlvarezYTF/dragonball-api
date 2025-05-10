@@ -30,7 +30,10 @@ class _TransformacionesPageState extends State<TransformacionesScreen> {
         elevation: 0,
         title: Row(
           children: [
-            const Text('Transformaciones', style: TextStyle(color: Colors.black)),
+            const Text(
+              'Transformaciones',
+              style: TextStyle(color: Colors.black),
+            ),
             const Spacer(),
             Image.network(
               logoUrl,
@@ -70,22 +73,31 @@ class _TransformacionesPageState extends State<TransformacionesScreen> {
             children: [
               // GridView con las transformaciones
               Expanded(
-                child: GridView.builder(
-                  padding: const EdgeInsets.all(8),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2, // 2 cards por fila
-                    childAspectRatio: 0.75, // Proporción de aspecto alto/ancho
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                  ),
-                  itemCount: transformaciones.length,
-                  itemBuilder: (context, index) {
-                    final transformacion = transformaciones[index];
-                    return TransformacionCard(
-                      transformacion: transformacion,
-                      onTap: () {
-                        // Aquí puedes agregar navegación a detalles si lo deseas
-                        print('Seleccionado: ${transformacion.name}');
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    // Puedes ajustar el breakpoint a tu gusto
+                    final isDesktop = constraints.maxWidth > 900;
+                    final crossAxisCount = isDesktop ? 4 : 2;
+                    final childAspectRatio =
+                        isDesktop ? 0.85 : 0.75; // Más angosto en desktop
+
+                    return GridView.builder(
+                      padding: const EdgeInsets.all(8),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: crossAxisCount,
+                        childAspectRatio: childAspectRatio,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 10,
+                      ),
+                      itemCount: transformaciones.length,
+                      itemBuilder: (context, index) {
+                        final transformacion = transformaciones[index];
+                        return TransformacionCard(
+                          transformacion: transformacion,
+                          // Si quieres pasar tamaño, puedes agregar parámetros opcionales en tu widget
+                          width: isDesktop ? 180 : null,
+                          height: isDesktop ? 260 : null,
+                        );
                       },
                     );
                   },

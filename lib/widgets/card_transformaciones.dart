@@ -4,11 +4,15 @@ import '../models/transformation.dart';
 class TransformacionCard extends StatelessWidget {
   final Transformacion transformacion;
   final VoidCallback? onTap;
+  final double? width;
+  final double? height;
 
   const TransformacionCard({
     super.key,
     required this.transformacion,
     this.onTap,
+    this.width,
+    this.height,
   });
 
   @override
