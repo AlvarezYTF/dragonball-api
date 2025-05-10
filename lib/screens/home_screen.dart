@@ -107,17 +107,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       {"x": 0.50, "y": 0.80, "size": 0.13}, // esfera 7
     ];
 
-    final gradient = const LinearGradient(
-      colors: [Colors.black, Color(0xFFFFD700)],
-      begin: Alignment.centerLeft,
-      end: Alignment.centerRight,
-    );
-    final hoverGradient = const LinearGradient(
-      colors: [Color(0xFFB71C1C), Color(0xFFFFD700)],
-      begin: Alignment.centerLeft,
-      end: Alignment.centerRight,
-    );
-
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       body:
