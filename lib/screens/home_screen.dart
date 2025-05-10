@@ -61,9 +61,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       final randomY = _random.nextDouble() * (screenHeight - 100);
 
       final imageOptions = [
-        'assets/effects/flash1.png',
-        'assets/effects/flash2.png',
-        'assets/effects/flash3.png',
+        '../assets/effects/flash1.png',
+        '../assets/effects/flash2.png',
+        '../assets/effects/flash3.png',
       ];
       final selectedImage = imageOptions[_random.nextInt(imageOptions.length)];
 
@@ -107,6 +107,17 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       {"x": 0.50, "y": 0.80, "size": 0.13}, // esfera 7
     ];
 
+    final gradient = const LinearGradient(
+      colors: [Colors.black, Color(0xFFFFD700)],
+      begin: Alignment.centerLeft,
+      end: Alignment.centerRight,
+    );
+    final hoverGradient = const LinearGradient(
+      colors: [Color(0xFFB71C1C), Color(0xFFFFD700)],
+      begin: Alignment.centerLeft,
+      end: Alignment.centerRight,
+    );
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       body:
@@ -119,13 +130,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               )
               : Stack(
                 children: [
-                  Container(
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [Colors.black, Color(0xFF0A0A23)],
-                      ),
+                  Positioned.fill(
+                    child: Image.asset(
+                      '../assets/images/torneo.jpg', // Cambia la ruta a tu imagen
+                      fit: BoxFit.cover,
                     ),
                   ),
 

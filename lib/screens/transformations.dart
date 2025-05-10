@@ -4,7 +4,7 @@ import '../services/transformacion_service.dart';
 import '../widgets/dragonballs_loader.dart';
 import '../widgets/card_transformaciones.dart';
 
-const String logoUrl = 'assets/logo_dragonballapi.webp';
+const String logoUrl = '../assets/logo_dragonballapi.webp';
 
 class TransformacionesScreen extends StatefulWidget {
   const TransformacionesScreen({super.key});
