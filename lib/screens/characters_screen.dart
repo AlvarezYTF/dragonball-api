@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/character.dart';
 import '../services/api_service.dart';
 import '../widgets/character_card.dart';
+import 'character_detail_screen.dart';
 
 const String logoUrl = 'assets/logo_dragonballapi.webp';
 
@@ -14,6 +15,7 @@ class CharactersScreen extends StatefulWidget {
 
 class _CharactersScreenState extends State<CharactersScreen> {
   late Future<List<Personaje>> _personajes;
+  Personaje? _selectedCharacter;
 
   @override
   void initState() {
@@ -71,10 +73,20 @@ class _CharactersScreenState extends State<CharactersScreen> {
                     padding: const EdgeInsets.all(12),
                     itemCount: personajes.length,
                     itemBuilder: (context, index) {
-                      return CharacterCard(personaje: personajes[index]);
+                      final personaje = personajes[index];
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedCharacter = personaje;
+                          });
+                        },
+                        child: CharacterCard(personaje: personaje),
+                      );
                     },
                   ),
                 ),
+                    if (_selectedCharacter != null)
+                    CharacterDetailWidget(personaje: _selectedCharacter!),
               ],
             );
           },
