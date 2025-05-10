@@ -2,17 +2,13 @@ import 'package:flutter/material.dart';
 
 class FloatingDragonBall extends StatelessWidget {
   final String imagePath;
-  final double size;
-  final double left;
-  final double top;
+  final double size; // proporción respecto a imgWidth
   final Animation<double> animation;
 
   const FloatingDragonBall({
     super.key,
     required this.imagePath,
     required this.size,
-    required this.left,
-    required this.top,
     required this.animation,
   });
 
@@ -21,9 +17,8 @@ class FloatingDragonBall extends StatelessWidget {
     return AnimatedBuilder(
       animation: animation,
       builder: (_, __) {
-        return Positioned(
-          left: left,
-          top: top + animation.value,
+        return Transform.translate(
+          offset: Offset(0, animation.value),
           child: Image.asset(
             imagePath,
             width: size,
