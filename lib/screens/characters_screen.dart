@@ -32,7 +32,7 @@ class _CharactersScreenState extends State<CharactersScreen> {
         title: Row(
           children: [
             const Text('Personajes', style: TextStyle(color: Colors.black)),
-            const Spacer(), 
+            const Spacer(),
             Image.network(
               logoUrl,
               height: 40,
@@ -57,36 +57,50 @@ class _CharactersScreenState extends State<CharactersScreen> {
                 child: Text('No hay personajes disponibles.'),
               );
             }
+
             final personajes = snapshot.data!;
-            return Column(
+
+            // ✅ CAMBIO 1: Usamos Stack para superponer el detalle flotante
+            return Stack(
               children: [
-                const SizedBox(height: 10),
-                Expanded(
-                  child: GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 0.68,
-                          crossAxisSpacing: 12,
-                          mainAxisSpacing: 12,
-                        ),
-                    padding: const EdgeInsets.all(12),
-                    itemCount: personajes.length,
-                    itemBuilder: (context, index) {
-                      final personaje = personajes[index];
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _selectedCharacter = personaje;
-                          });
+                Column(
+                  children: [
+                    const SizedBox(height: 10),
+                    Expanded(
+                      child: GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              childAspectRatio: 0.68,
+                              crossAxisSpacing: 12,
+                              mainAxisSpacing: 12,
+                            ),
+                        padding: const EdgeInsets.all(12),
+                        itemCount: personajes.length,
+                        itemBuilder: (context, index) {
+                          final personaje = personajes[index];
+                          return GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _selectedCharacter = personaje;
+                              });
+                            },
+                            child: CharacterCard(personaje: personaje),
+                          );
                         },
-                        child: CharacterCard(personaje: personaje),
-                      );
-                    },
-                  ),
+                      ),
+                    ),
+                  ],
                 ),
-                    if (_selectedCharacter != null)
-                    CharacterDetailWidget(personaje: _selectedCharacter!),
+
+                // ✅ CAMBIO 2: Mostrar la pantalla flotante con botón de cerrar
+                if (_selectedCharacter != null)
+                  Positioned.fill(
+                    child: CharacterDetailScreen(
+                      personaje: _selectedCharacter!,
+                      onClose: () => setState(() => _selectedCharacter = null),
+                    ),
+                  ),
               ],
             );
           },
