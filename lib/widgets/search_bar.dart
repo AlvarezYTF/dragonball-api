@@ -12,15 +12,34 @@ class SearchBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 600;
+
     return Padding(
-      padding: const EdgeInsets.all(12.0),
-      child: TextField(
-        decoration: InputDecoration(
-          labelText: hintText,
-          prefixIcon: const Icon(Icons.search),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.orange[100],
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.orangeAccent.withOpacity(0.4),
+              blurRadius: 6,
+              offset: const Offset(0, 3),
+            )
+          ],
         ),
-        onChanged: onChanged,
+        child: TextField(
+          style: TextStyle(fontSize: isMobile ? 14 : 18),
+          decoration: InputDecoration(
+            contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+            hintText: hintText,
+            hintStyle: TextStyle(color: Colors.orange[800]),
+            prefixIcon: const Icon(Icons.search, color: Colors.deepOrange),
+            border: InputBorder.none,
+          ),
+          onChanged: onChanged,
+        ),
       ),
     );
   }
