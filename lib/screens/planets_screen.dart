@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import '../models/planet.dart';
 import '../services/planet_service.dart';
+import '../widgets/search_bar.dart';
 import 'planet_detail_screen.dart';
 
 class PlanetsScreen extends StatefulWidget {
@@ -16,6 +17,7 @@ class _PlanetsScreenState extends State<PlanetsScreen>
   late Future<List<Planeta>> _planetas;
   late AnimationController _controlador;
   late Animation<double> _rotacion;
+  String _query = '';
 
   @override
   void initState() {
@@ -149,6 +151,32 @@ class _PlanetsScreenState extends State<PlanetsScreen>
     );
   }
 
+  Widget _buildMensajeNoEncontrado() {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Image.asset(
+            'assets/images/freezer.gif',
+            width: 120,
+            height: 120,
+            fit: BoxFit.contain,
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'No se encontró ningún planeta con el nombre "$_query"\nFreezer destruyó todo sobre este planeta.',
+            style: const TextStyle(
+              color: Colors.white70,
+              fontStyle: FontStyle.italic,
+              fontSize: 14,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -163,7 +191,13 @@ class _PlanetsScreenState extends State<PlanetsScreen>
               }
 
               final planetas = snapshot.data!;
-              final total = planetas.length;
+              final filtrados =
+                  _query.isEmpty
+                      ? planetas
+                      : planetas
+                          .where((p) => p.name.toLowerCase().contains(_query))
+                          .toList();
+              final total = filtrados.length;
               final centroX = constraints.maxWidth / 2;
               final centroY = constraints.maxHeight / 2.15;
               final radio =
@@ -179,16 +213,29 @@ class _PlanetsScreenState extends State<PlanetsScreen>
                   ),
                   ..._buildEstrellasDecorativas(constraints),
                   _buildLogo(constraints),
-                  _buildCentroEsfera(centroX, centroY),
-                  for (int i = 0; i < total; i++)
-                    _buildPlaneta(
-                      planetas[i],
-                      i,
-                      total,
-                      radio,
-                      centroX,
-                      centroY,
+                  if (filtrados.isEmpty && _query.isNotEmpty)
+                    _buildMensajeNoEncontrado()
+                  else ...[
+                    _buildCentroEsfera(centroX, centroY),
+                    for (int i = 0; i < total; i++)
+                      _buildPlaneta(
+                        filtrados[i],
+                        i,
+                        total,
+                        radio,
+                        centroX,
+                        centroY,
+                      ),
+                  ],
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: SearchBarWidget(
+                      hintText: 'Buscar planeta',
+                      onChanged:
+                          (query) =>
+                              setState(() => _query = query.toLowerCase()),
                     ),
+                  ),
                 ],
               );
             },

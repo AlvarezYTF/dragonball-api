@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/character.dart';
 import '../services/api_service.dart';
 import '../widgets/character_card.dart';
+import '../widgets/search_bar.dart';
 
 const String logoUrl = 'assets/logo_dragonballapi.webp';
 
@@ -14,6 +15,7 @@ class CharactersScreen extends StatefulWidget {
 
 class _CharactersScreenState extends State<CharactersScreen> {
   late Future<List<Personaje>> _personajes;
+  String _query = '';
 
   @override
   void initState() {
@@ -35,9 +37,8 @@ class _CharactersScreenState extends State<CharactersScreen> {
               logoUrl,
               height: 40,
               fit: BoxFit.contain,
-              errorBuilder:
-                  (context, error, stackTrace) =>
-                      const Icon(Icons.error, color: Colors.red),
+              errorBuilder: (context, error, stackTrace) =>
+                  const Icon(Icons.error, color: Colors.red),
             ),
           ],
         ),
@@ -56,24 +57,57 @@ class _CharactersScreenState extends State<CharactersScreen> {
               );
             }
             final personajes = snapshot.data!;
+            final filtrados = _query.isEmpty
+                ? personajes
+                : personajes.where((p) => p.name.toLowerCase().contains(_query)).toList();
+
             return Column(
               children: [
-                const SizedBox(height: 10),
-                Expanded(
-                  child: GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 0.68,
-                          crossAxisSpacing: 12,
-                          mainAxisSpacing: 12,
-                        ),
-                    padding: const EdgeInsets.all(12),
-                    itemCount: personajes.length,
-                    itemBuilder: (context, index) {
-                      return CharacterCard(personaje: personajes[index]);
-                    },
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  child: SearchBarWidget(
+                    hintText: 'Buscar personaje',
+                    onChanged: (query) => setState(() => _query = query.toLowerCase()),
                   ),
+                ),
+                Expanded(
+                  child: filtrados.isEmpty
+                      ? Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Image.asset(
+                                'assets/images/freezer.gif',
+                                width: 120,
+                                height: 120,
+                                fit: BoxFit.contain,
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                'No se encontró ningún personaje con el nombre "$_query"\nFreezer destruyó todo sobre este personaje.',
+                                style: const TextStyle(
+                                  color: Colors.black54,
+                                  fontStyle: FontStyle.italic,
+                                  fontSize: 14,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                        )
+                      : GridView.builder(
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 0.68,
+                            crossAxisSpacing: 12,
+                            mainAxisSpacing: 12,
+                          ),
+                          padding: const EdgeInsets.all(12),
+                          itemCount: filtrados.length,
+                          itemBuilder: (context, index) {
+                            return CharacterCard(personaje: filtrados[index]);
+                          },
+                        ),
                 ),
               ],
             );
