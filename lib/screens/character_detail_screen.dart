@@ -68,7 +68,7 @@ class _CharacterDetailScreenState extends State<CharacterDetailScreen>
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Image.network(widget.personaje.image, height: 100),
+                    Image.network(widget.personaje.image, height: 200),
                     const SizedBox(height: 10),
                     Text(
                       widget.personaje.name,
@@ -76,6 +76,33 @@ class _CharacterDetailScreenState extends State<CharacterDetailScreen>
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.orange,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      'Ki Base: ${widget.personaje.ki}',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.orange.shade700,
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Text(
+                      'Ki Máximo: ${widget.personaje.maxKi}',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.orange.shade700,
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Text(
+                      'Grupo: ${widget.personaje.affiliation}',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.orange.shade700,
                       ),
                     ),
                     const SizedBox(height: 10),
