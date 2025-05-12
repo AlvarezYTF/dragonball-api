@@ -6,6 +6,7 @@ import '../screens/transformations.dart';
 import '../widgets/cards_cortadas.dart';
 import '../widgets/hitflash.dart';
 import 'dart:async';
+import 'characters_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -60,9 +61,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       final randomX = _random.nextDouble() * (screenWidth - 100);
       final randomY = _random.nextDouble() * (screenHeight - 100);
 
-      final imageOptions = [
-        '../assets/effects/flash1.png'
-      ];
+      final imageOptions = ['../assets/effects/flash1.png'];
       final selectedImage = imageOptions[_random.nextInt(imageOptions.length)];
 
       final flash = HitFlash(

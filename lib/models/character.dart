@@ -1,5 +1,6 @@
 import 'planet.dart';
 import 'transformation.dart';
+
 class Personaje {
   final int id;
   final String name;
@@ -27,21 +28,34 @@ class Personaje {
     required this.transformations,
   });
 
-  factory Personaje.fromJson(Map<String, dynamic> json) {
-    return Personaje(
-      id: json['id'],
-      name: json['name'],
-      ki: json['ki'],
-      maxKi: json['maxKi'],
-      race: json['race'],
-      gender: json['gender'],
-      description: json['description'],
-      image: json['image'],
-      affiliation: json['affiliation'],
-      originPlanet: Planeta.fromJson(json['originPlanet']),
-      transformations: (json['transformations'] as List)
-          .map((t) => Transformacion.fromJson(t))
-          .toList(),
-    );
-  }
+ factory Personaje.fromJson(Map<String, dynamic> json) {
+  return Personaje(
+    id: json['id'],
+    name: json['name'],
+    ki: json['ki'],
+    maxKi: json['maxKi'],
+    race: json['race'],
+    gender: json['gender'],
+    description: json['description'],
+    image: json['image'],
+    affiliation: json['affiliation'],
+
+    originPlanet: json['originPlanet'] != null
+        ? Planeta.fromJson(json['originPlanet'])
+        : Planeta(
+            id: 0,
+            name: 'Desconocido',
+            isDestroyed: false,
+            description: 'Sin información',
+            image: '',
+            characters: [],
+          ),
+
+    transformations: json['transformations'] != null
+        ? (json['transformations'] as List)
+            .map((t) => Transformacion.fromJson(t))
+            .toList()
+        : [],
+  );
+}
 }

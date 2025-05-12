@@ -22,7 +22,7 @@ class Planeta {
       id: json['id'],
       name: json['name'],
       isDestroyed: json['isDestroyed'],
-      description: json['desription'],
+      description: json['description'],
       image: json['image'],
       characters: json['characters'],
     );
