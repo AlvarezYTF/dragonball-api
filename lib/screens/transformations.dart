@@ -3,6 +3,7 @@ import '../models/transformation.dart';
 import '../services/transformacion_service.dart';
 import '../widgets/dragonballs_loader.dart';
 import '../widgets/card_transformaciones.dart';
+import 'transformations_detail.dart';
 
 const String logoUrl = '../assets/logo_dragonballapi.webp';
 
@@ -15,6 +16,9 @@ class TransformacionesScreen extends StatefulWidget {
 
 class _TransformacionesPageState extends State<TransformacionesScreen> {
   late Future<List<Transformacion>> _futureTransformaciones;
+
+  // 🔥 Set para controlar los índices con hover o tap
+  final Set<int> _hoveredIndexes = {};
 
   @override
   void initState() {
@@ -53,9 +57,7 @@ class _TransformacionesPageState extends State<TransformacionesScreen> {
             return const Center(
               child: SizedBox(
                 height: 150,
-                child: DragonBallsLoader(
-                  duration: Duration(seconds: 7), // animación continua
-                ),
+                child: DragonBallsLoader(duration: Duration(seconds: 7)),
               ),
             );
           } else if (snapshot.hasError) {
@@ -68,18 +70,14 @@ class _TransformacionesPageState extends State<TransformacionesScreen> {
 
           final transformaciones = snapshot.data!;
 
-          // Opción 1: Usar Column con un logo arriba y GridView abajo
           return Column(
             children: [
-              // GridView con las transformaciones
               Expanded(
                 child: LayoutBuilder(
                   builder: (context, constraints) {
-                    // Puedes ajustar el breakpoint a tu gusto
                     final isDesktop = constraints.maxWidth > 900;
                     final crossAxisCount = isDesktop ? 4 : 2;
-                    final childAspectRatio =
-                        isDesktop ? 0.85 : 0.75; // Más angosto en desktop
+                    final childAspectRatio = isDesktop ? 0.85 : 0.75;
 
                     return GridView.builder(
                       padding: const EdgeInsets.all(8),
@@ -92,11 +90,50 @@ class _TransformacionesPageState extends State<TransformacionesScreen> {
                       itemCount: transformaciones.length,
                       itemBuilder: (context, index) {
                         final transformacion = transformaciones[index];
-                        return TransformacionCard(
-                          transformacion: transformacion,
-                          // Si quieres pasar tamaño, puedes agregar parámetros opcionales en tu widget
-                          width: isDesktop ? 180 : null,
-                          height: isDesktop ? 260 : null,
+                        final isHovered = _hoveredIndexes.contains(index);
+
+                        return GestureDetector(
+                          onTap: () {
+                            final related =
+                                transformaciones
+                                    .where(
+                                      (t) =>
+                                          t.personajeId ==
+                                              transformacion.personajeId &&
+                                          t.id != transformacion.id,
+                                    )
+                                    .toList();
+                            showModalBottomSheet(
+                              context: context,
+                              builder:
+                                  (_) => TransformationDetailModal(
+                                    transformacion: transformacion,
+                                    relatedTransformations: related,
+                                  ),
+                            );
+                          },
+                          child: MouseRegion(
+                            onEnter: (_) {
+                              setState(() {
+                                _hoveredIndexes.add(index);
+                              });
+                            },
+                            onExit: (_) {
+                              setState(() {
+                                _hoveredIndexes.remove(index);
+                              });
+                            },
+                            child: AnimatedScale(
+                              scale: isHovered ? 1.1 : 1.0,
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeInOut,
+                              child: TransformacionCard(
+                                transformacion: transformacion,
+                                width: isDesktop ? 180 : null,
+                                height: isDesktop ? 260 : null,
+                              ),
+                            ),
+                          ),
                         );
                       },
                     );

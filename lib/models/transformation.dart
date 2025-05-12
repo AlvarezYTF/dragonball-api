@@ -3,12 +3,16 @@ class Transformacion {
   final String name;
   final String image;
   final String ki;
+  final int personajeId; // <--- MUY IMPORTANTE
+
+  // constructor, fromJson, etc.
 
   Transformacion({
     required this.id,
     required this.name,
     required this.image,
     required this.ki,
+    required this.personajeId,
   });
 
   factory Transformacion.fromJson(Map<String, dynamic> json) {
@@ -17,6 +21,7 @@ class Transformacion {
       name: json['name'],
       image: json['image'],
       ki: json['ki'],
+      personajeId: json['personaje_id'],
     );
   }
 
@@ -26,6 +31,7 @@ class Transformacion {
       'name': name,
       'image': image,
       'ki': ki,
+      'personaje_id': personajeId,
     };
   }
 }
