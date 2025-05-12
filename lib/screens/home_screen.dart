@@ -123,70 +123,107 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     ),
                   ),
 
-                  if (isMobile)
-                    Positioned(
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          MouseRegion(
-                            cursor: SystemMouseCursors.click,
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder:
-                                        (context) =>
-                                            const TransformacionesScreen(),
+                  ...(
+                    isMobile
+                      ? [
+                          Positioned(
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                // Personajes
+                                MouseRegion(
+                                  cursor: SystemMouseCursors.click,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => const CharactersScreen(),
+                                        ),
+                                      );
+                                    },
+                                    child: const NovedadesCard(
+                                      titulo: "Personajes",
+                                    ),
                                   ),
-                                );
-                              },
-                              child: const NovedadesCard(
-                                titulo: "Transformaciones",
+                                ),
+                              ],
+                            ),
+                          ),
+                          Positioned(
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                // Transformaciones
+                                MouseRegion(
+                                  cursor: SystemMouseCursors.click,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => const TransformacionesScreen(),
+                                        ),
+                                      );
+                                    },
+                                    child: const NovedadesCard(
+                                      titulo: "Transformaciones",
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ]
+                      : [
+                          Positioned(
+                            top: screenHeight * 0.12,
+                            right: -screenWidth * 0.1,
+                            child: MouseRegion(
+                              cursor: SystemMouseCursors.click,
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const CharactersScreen(),
+                                    ),
+                                  );
+                                },
+                                child: const NovedadesCard(
+                                  titulo: "Personajes",
+                                ),
                               ),
                             ),
                           ),
-                          const NovedadesCard(titulo: "Personajes"),
-                          const NovedadesCard(titulo: "Planetas"),
-                        ],
-                      ),
-                    )
-                  else ...[
-                    Positioned(
-                      top: screenHeight * 0.04,
-                      right: -screenWidth * 0.1,
-                      child: MouseRegion(
-                        cursor: SystemMouseCursors.click,
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder:
-                                    (context) => const TransformacionesScreen(),
+                          Positioned(
+                            top: screenHeight * 0.04,
+                            right: -screenWidth * 0.1,
+                            child: MouseRegion(
+                              cursor: SystemMouseCursors.click,
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const TransformacionesScreen(),
+                                    ),
+                                  );
+                                },
+                                child: const NovedadesCard(
+                                  titulo: "Transformaciones",
+                                ),
                               ),
-                            );
-                          },
-                          child: const NovedadesCard(
-                            titulo: "Transformaciones",
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      top: screenHeight * 0.12,
-                      right: -screenWidth * 0.1,
-                      child: const NovedadesCard(titulo: "Personajes"),
-                    ),
-                    Positioned(
-                      top: screenHeight * 0.20,
-                      right: -screenWidth * 0.1,
-                      child: const NovedadesCard(titulo: "Planetas"),
-                    ),
-                  ],
+                        ]
+                  ),
 
                   ...[0, 2, 4].map((i) {
                     final ball = dragonBalls[i];

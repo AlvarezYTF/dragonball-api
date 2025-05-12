@@ -19,12 +19,6 @@ dev_dependencies:
   flutter_lints: ^5.0.0
 
 flutter:
-  assets:
-    - assets/logo_dragonballapi.webp
-
-  # The following line ensures that the Material Icons font is
-  # included with your application, so that you can use the icons in
-  # the material Icons class.
   uses-material-design: true
   assets:
     - assets/logo_dragonballapi.webp
@@ -40,4 +34,3 @@ flutter:
     - assets/esferas_dragon/esfera_5.png
     - assets/esferas_dragon/esfera_6.png
     - assets/esferas_dragon/esfera_7.png
-    

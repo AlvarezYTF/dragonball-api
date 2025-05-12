@@ -49,16 +49,11 @@ class _TransformacionesPageState extends State<TransformacionesScreen> {
       body: FutureBuilder<List<Transformacion>>(
         future: _futureTransformaciones,
         builder: (context, snapshot) {
-          return ColoredBox(
-            color: Colors.grey[100],
-            child:
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
               child: SizedBox(
                 height: 150,
-                child: DragonBallsLoader(
-                  duration: Duration(seconds: 7), // animación continua
-                ),
+                child: DragonBallsLoader(duration: Duration(seconds: 7)),
               ),
             );
           } else if (snapshot.hasError) {
@@ -71,42 +66,39 @@ class _TransformacionesPageState extends State<TransformacionesScreen> {
 
           final transformaciones = snapshot.data!;
 
-          // Opción 1: Usar Column con un logo arriba y GridView abajo
-          return Column(
-            children: [
-              // GridView con las transformaciones
-              Expanded(
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    // Puedes ajustar el breakpoint a tu gusto
-                    final isDesktop = constraints.maxWidth > 900;
-                    final crossAxisCount = isDesktop ? 4 : 2;
-                    final childAspectRatio =
-                        isDesktop ? 0.85 : 0.75; // Más angosto en desktop
-
-                    return GridView.builder(
-                      padding: const EdgeInsets.all(8),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: crossAxisCount,
-                        childAspectRatio: childAspectRatio,
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
-                      ),
-                      itemCount: transformaciones.length,
-                      itemBuilder: (context, index) {
-                        final transformacion = transformaciones[index];
-                        return TransformacionCard(
-                          transformacion: transformacion,
-                          // Si quieres pasar tamaño, puedes agregar parámetros opcionales en tu widget
-                          width: isDesktop ? 180 : null,
-                          height: isDesktop ? 260 : null,
-                        );
-                      },
-                    );
-                  },
+          return ColoredBox(
+            color: Colors.grey[100]!,
+            child: Column(
+              children: [
+                Expanded(
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      final isDesktop = constraints.maxWidth > 900;
+                      final crossAxisCount = isDesktop ? 4 : 2;
+                      final childAspectRatio = isDesktop ? 0.85 : 0.75;
+                      return GridView.builder(
+                        padding: const EdgeInsets.all(8),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: crossAxisCount,
+                          childAspectRatio: childAspectRatio,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                        ),
+                        itemCount: transformaciones.length,
+                        itemBuilder: (context, index) {
+                          final transformacion = transformaciones[index];
+                          return TransformacionCard(
+                            transformacion: transformacion,
+                            width: isDesktop ? 180 : null,
+                            height: isDesktop ? 260 : null,
+                          );
+                        },
+                      );
+                    },
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
         },
       ),
