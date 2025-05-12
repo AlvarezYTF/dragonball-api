@@ -7,6 +7,7 @@ import '../widgets/cards_cortadas.dart';
 import '../widgets/hitflash.dart';
 import 'dart:async';
 import 'characters_screen.dart';
+import 'planets_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -180,6 +181,33 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                               ],
                             ),
                           ),
+                          Positioned(
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                // Transformaciones
+                                MouseRegion(
+                                  cursor: SystemMouseCursors.click,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => const PlanetsScreen(),
+                                        ),
+                                      );
+                                    },
+                                    child: const NovedadesCard(
+                                      titulo: "Planetas",
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ]
                       : [
                           Positioned(
@@ -218,6 +246,26 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                 },
                                 child: const NovedadesCard(
                                   titulo: "Transformaciones",
+                                ),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            top: screenHeight * 0.04,
+                            right: -screenWidth * 0.1,
+                            child: MouseRegion(
+                              cursor: SystemMouseCursors.click,
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const PlanetsScreen(),
+                                    ),
+                                  );
+                                },
+                                child: const NovedadesCard(
+                                  titulo: "Planetas",
                                 ),
                               ),
                             ),
