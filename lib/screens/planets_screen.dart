@@ -115,7 +115,7 @@ class _PlanetsScreenState extends State<PlanetsScreen>
         width: constraints.maxWidth * 0.28,
         child: Column(
           children: [
-            Image.asset('assets/logo_dragon_ball.png', fit: BoxFit.contain),
+            Image.asset('assets/logo_dragonballapi.webp', fit: BoxFit.contain),
             const Text(
               'The Dragon Ball API',
               style: TextStyle(
@@ -139,7 +139,7 @@ class _PlanetsScreenState extends State<PlanetsScreen>
             child: Transform.rotate(
               angle: _rotacion.value,
               child: Image.asset(
-                'assets/logo_esfera.png',
+                'assets/images/logo_esfera.png',
                 width: 80,
                 height: 80,
                 fit: BoxFit.contain,
@@ -173,7 +173,7 @@ class _PlanetsScreenState extends State<PlanetsScreen>
                 children: [
                   Positioned.fill(
                     child: Image.asset(
-                      'assets/fondo_dragonball.jpg',
+                      'assets/images/fondo_dragonball.jpg',
                       fit: BoxFit.cover,
                     ),
                   ),

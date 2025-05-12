@@ -6,7 +6,7 @@ import '../screens/planet_detail_screen.dart';
 class PlanetCard extends StatefulWidget {
   final Planeta planet;
 
-  const PlanetCard({Key? key, required this.planet}) : super(key: key);
+  const PlanetCard({super.key, required this.planet});
 
   @override
   State<PlanetCard> createState() => _PlanetCardState();

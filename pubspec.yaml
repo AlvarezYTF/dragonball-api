@@ -27,6 +27,10 @@ flutter:
     - assets/effects/flash3.png
     - assets/images/goku_jiren.png
     - assets/images/torneo.jpg
+    - assets/images/fondo_dragonball.jpg
+    - assets/images/logo_dragon.png
+    - assets/images/logo_esfera.png
+    - assets/images/logo_estrellas.png
     - assets/esferas_dragon/esfera_1.png
     - assets/esferas_dragon/esfera_2.png
     - assets/esferas_dragon/esfera_3.png
