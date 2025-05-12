@@ -49,6 +49,9 @@ class _TransformacionesPageState extends State<TransformacionesScreen> {
       body: FutureBuilder<List<Transformacion>>(
         future: _futureTransformaciones,
         builder: (context, snapshot) {
+          return ColoredBox(
+            color: Colors.grey[100],
+            child:
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
               child: SizedBox(

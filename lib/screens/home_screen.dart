@@ -61,9 +61,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       final randomY = _random.nextDouble() * (screenHeight - 100);
 
       final imageOptions = [
-        '../assets/effects/flash1.png',
-        '../assets/effects/flash2.png',
-        '../assets/effects/flash3.png',
+        '../assets/effects/flash1.png'
       ];
       final selectedImage = imageOptions[_random.nextInt(imageOptions.length)];
 
