@@ -111,6 +111,63 @@ class _CharacterDetailScreenState extends State<CharacterDetailScreen>
                       textAlign: TextAlign.justify,
                       style: const TextStyle(fontSize: 14),
                     ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Transformaciones:',
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.orange,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        if (widget.personaje.transformations.isEmpty)
+                          const Text(
+                            'Este personaje no tiene transformaciones registradas',
+                            style: TextStyle(fontSize: 14),
+                          )
+                        else
+                          Column(
+                            children:
+                                widget.personaje.transformations.map((t) {
+                                  return Container(
+                                    margin: const EdgeInsets.symmetric(
+                                      vertical: 8,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.orange,
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(color: Colors.orange),
+                                    ),
+                                    child: ListTile(
+                                      leading: ClipRRect(
+                                        borderRadius: BorderRadius.circular(8),
+                                        child: Image.network(
+                                          t.image,
+                                          width: 50,
+                                          height: 50,
+                                          fit: BoxFit.cover,
+                                          errorBuilder:
+                                              (context, error, stackTrace) =>
+                                                  const Icon(
+                                                    Icons.broken_image,
+                                                  ),
+                                        ),
+                                      ),
+                                      title: Text(
+                                        t.name,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                          ),
+                      ],
+                    ),
                     const SizedBox(height: 20),
                     ElevatedButton.icon(
                       onPressed: widget.onClose,
