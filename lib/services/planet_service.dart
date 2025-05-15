@@ -12,11 +12,22 @@ class PlanetService {
       final data = jsonDecode(response.body);
       final List<dynamic> items = data['items'] ?? data;
       return items
-      .map((json) => Planeta.fromJson(json))
-      .where((planet) => planet.name.toLowerCase() != 'desconocido')
-      .toList();
+          .map((json) => Planeta.fromJson(json))
+          .where((planet) => planet.name.toLowerCase() != 'desconocido')
+          .toList();
     } else {
       throw Exception('Error al cargar los planetas');
+    }
+  }
+
+  Future<Planeta> getPlanetDetails(int planetId) async {
+    final response = await http.get(Uri.parse('$baseUrl/planets/$planetId'));
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      return Planeta.fromJson(data);
+    } else {
+      throw Exception('Error al cargar los detalles del planeta');
     }
   }
 }
