@@ -90,14 +90,14 @@ class _TransformacionesPageState extends State<TransformacionesScreen> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Image.asset(
-                                'assets/images/freezer.gif',
+                                'assets/images/majinbuu.gif',
                                 width: 120,
                                 height: 120,
                                 fit: BoxFit.contain,
                               ),
                               const SizedBox(height: 8),
                               Text(
-                                'No se encontró ninguna transformación con el nombre "$_query"\nFreezer destruyó todo sobre esta transformación.',
+                                'No se encontró ninguna transformación con el nombre "$_query"\nMajin buu acabo con esta trasnformación.',
                                 style: const TextStyle(
                                   color: Colors.black54,
                                   fontStyle: FontStyle.italic,

@@ -157,7 +157,7 @@ class _PlanetsScreenState extends State<PlanetsScreen>
         mainAxisSize: MainAxisSize.min,
         children: [
           Image.asset(
-            'assets/images/freezer.gif',
+            'assets/images/freezer (2).gif',
             width: 120,
             height: 120,
             fit: BoxFit.contain,
