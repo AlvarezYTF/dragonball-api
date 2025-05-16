@@ -5,6 +5,8 @@ import '../services/planet_service.dart';
 import '../widgets/search_bar.dart';
 import 'planet_detail_screen.dart';
 
+const String logoUrl = '../assets/logo_dragonballapi.webp';
+
 class PlanetsScreen extends StatefulWidget {
   const PlanetsScreen({super.key});
 
@@ -182,6 +184,16 @@ class _PlanetsScreenState extends State<PlanetsScreen>
     return LayoutBuilder(
       builder: (context, constraints) {
         return Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.grey[300],
+            elevation: 0,
+            title: Row(
+              children: [
+                const Text('Planetas', style: TextStyle(color: Colors.black)),
+                const Spacer()
+              ],
+            ),
+          ),
           backgroundColor: Colors.black,
           body: FutureBuilder<List<Planeta>>(
             future: _planetas,
@@ -201,7 +213,7 @@ class _PlanetsScreenState extends State<PlanetsScreen>
               final centroX = constraints.maxWidth / 2;
               final centroY = constraints.maxHeight / 2.15;
               final radio =
-                  min(constraints.maxWidth, constraints.maxHeight) * 0.35;
+                  min(constraints.maxWidth, constraints.maxHeight) * 0.30;
 
               return Stack(
                 children: [

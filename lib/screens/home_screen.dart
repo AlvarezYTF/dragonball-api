@@ -130,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           Positioned(
                             left: 0,
                             right: 0,
-                            bottom: 0,
+                            bottom: 280,
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -157,7 +157,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           Positioned(
                             left: 0,
                             right: 0,
-                            bottom: 0,
+                            bottom: 220,
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -184,11 +184,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           Positioned(
                             left: 0,
                             right: 0,
-                            bottom: 0,
+                            bottom: 160,
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                // Transformaciones
+                                // Planetas
                                 MouseRegion(
                                   cursor: SystemMouseCursors.click,
                                   child: GestureDetector(
@@ -211,7 +211,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         ]
                       : [
                           Positioned(
-                            top: screenHeight * 0.12,
+                            top: screenHeight * 0.04,
                             right: -screenWidth * 0.1,
                             child: MouseRegion(
                               cursor: SystemMouseCursors.click,
@@ -231,7 +231,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             ),
                           ),
                           Positioned(
-                            top: screenHeight * 0.04,
+                            top: screenHeight * 0.12,
                             right: -screenWidth * 0.1,
                             child: MouseRegion(
                               cursor: SystemMouseCursors.click,
@@ -251,7 +251,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             ),
                           ),
                           Positioned(
-                            top: screenHeight * 0.04,
+                            top: screenHeight * 0.20,
                             right: -screenWidth * 0.1,
                             child: MouseRegion(
                               cursor: SystemMouseCursors.click,
