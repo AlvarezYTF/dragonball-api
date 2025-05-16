@@ -2,7 +2,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import '../models/planet.dart';
 import '../services/planet_service.dart';
+import '../widgets/search_bar.dart';
 import 'planet_detail_screen.dart';
+
+const String logoUrl = '../assets/logo_dragonballapi.webp';
 
 class PlanetsScreen extends StatefulWidget {
   const PlanetsScreen({super.key});
@@ -16,6 +19,7 @@ class _PlanetsScreenState extends State<PlanetsScreen>
   late Future<List<Planeta>> _planetas;
   late AnimationController _controlador;
   late Animation<double> _rotacion;
+  String _query = '';
 
   @override
   void initState() {
@@ -115,7 +119,7 @@ class _PlanetsScreenState extends State<PlanetsScreen>
         width: constraints.maxWidth * 0.28,
         child: Column(
           children: [
-            Image.asset('assets/logo_dragon_ball.png', fit: BoxFit.contain),
+            Image.asset('assets/logo_dragonballapi.webp', fit: BoxFit.contain),
             const Text(
               'The Dragon Ball API',
               style: TextStyle(
@@ -139,7 +143,7 @@ class _PlanetsScreenState extends State<PlanetsScreen>
             child: Transform.rotate(
               angle: _rotacion.value,
               child: Image.asset(
-                'assets/logo_esfera.png',
+                'assets/images/logo_esfera.png',
                 width: 80,
                 height: 80,
                 fit: BoxFit.contain,
@@ -149,11 +153,47 @@ class _PlanetsScreenState extends State<PlanetsScreen>
     );
   }
 
+  Widget _buildMensajeNoEncontrado() {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Image.asset(
+            'assets/images/freezer.gif',
+            width: 120,
+            height: 120,
+            fit: BoxFit.contain,
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'No se encontró ningún planeta con el nombre "$_query"\nFreezer destruyó todo sobre este planeta.',
+            style: const TextStyle(
+              color: Colors.white70,
+              fontStyle: FontStyle.italic,
+              fontSize: 14,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
         return Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.grey[300],
+            elevation: 0,
+            title: Row(
+              children: [
+                const Text('Planetas', style: TextStyle(color: Colors.black)),
+                const Spacer()
+              ],
+            ),
+          ),
           backgroundColor: Colors.black,
           body: FutureBuilder<List<Planeta>>(
             future: _planetas,
@@ -163,32 +203,51 @@ class _PlanetsScreenState extends State<PlanetsScreen>
               }
 
               final planetas = snapshot.data!;
-              final total = planetas.length;
+              final filtrados =
+                  _query.isEmpty
+                      ? planetas
+                      : planetas
+                          .where((p) => p.name.toLowerCase().contains(_query))
+                          .toList();
+              final total = filtrados.length;
               final centroX = constraints.maxWidth / 2;
               final centroY = constraints.maxHeight / 2.15;
               final radio =
-                  min(constraints.maxWidth, constraints.maxHeight) * 0.35;
+                  min(constraints.maxWidth, constraints.maxHeight) * 0.30;
 
               return Stack(
                 children: [
                   Positioned.fill(
                     child: Image.asset(
-                      'assets/fondo_dragonball.jpg',
+                      'assets/images/fondo_dragonball.jpg',
                       fit: BoxFit.cover,
                     ),
                   ),
                   ..._buildEstrellasDecorativas(constraints),
                   _buildLogo(constraints),
-                  _buildCentroEsfera(centroX, centroY),
-                  for (int i = 0; i < total; i++)
-                    _buildPlaneta(
-                      planetas[i],
-                      i,
-                      total,
-                      radio,
-                      centroX,
-                      centroY,
+                  if (filtrados.isEmpty && _query.isNotEmpty)
+                    _buildMensajeNoEncontrado()
+                  else ...[
+                    _buildCentroEsfera(centroX, centroY),
+                    for (int i = 0; i < total; i++)
+                      _buildPlaneta(
+                        filtrados[i],
+                        i,
+                        total,
+                        radio,
+                        centroX,
+                        centroY,
+                      ),
+                  ],
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: SearchBarWidget(
+                      hintText: 'Buscar planeta',
+                      onChanged:
+                          (query) =>
+                              setState(() => _query = query.toLowerCase()),
                     ),
+                  ),
                 ],
               );
             },
