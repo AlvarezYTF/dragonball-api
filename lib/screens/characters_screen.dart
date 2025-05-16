@@ -77,14 +77,14 @@ class _CharactersScreenState extends State<CharactersScreen> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Image.asset(
-                                'assets/images/freezer.gif',
+                                'assets/images/zeno-sama.gif',
                                 width: 120,
                                 height: 120,
                                 fit: BoxFit.contain,
                               ),
                               const SizedBox(height: 8),
                               Text(
-                                'No se encontró ningún personaje con el nombre "$_query"\nFreezer destruyó todo sobre este personaje.',
+                                'No se encontró ningún personaje con el nombre "$_query"\nZeno-Sama elimino de la faz del universo a este personaje.',
                                 style: const TextStyle(
                                   color: Colors.black54,
                                   fontStyle: FontStyle.italic,
