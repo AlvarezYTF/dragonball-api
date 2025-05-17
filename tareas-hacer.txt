@@ -1,7 +1,7 @@
 1. Arreglar el responsive del home para que los cards no queden pegadas con la imagen de jiren y las esferas del dragon
 2. Los personajes dividirlos en 4 cards para pantallas grandes
-3. Terminar los detalles de las transformaciones
 4. Unir los detalles de los planetas con la rama develop
-5. Convertir apk para instalar en telefono
 6. reducir el tamaño de las imagenes para que no se sobrecargue y se demore la carga de las imagenes
 7. Unir los detalles de los personajes con la rama develop
+3. Terminar los detalles de las transformaciones
+5. Convertir apk para instalar en telefono
