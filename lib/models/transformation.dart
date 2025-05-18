@@ -15,17 +15,12 @@ class Transformacion {
     return Transformacion(
       id: json['id'],
       name: json['name'],
-      image: json['image'],
+      image: json['image'] as String? ?? '',
       ki: json['ki'],
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'image': image,
-      'ki': ki,
-    };
+    return {'id': id, 'name': name, 'image': image, 'ki': ki};
   }
 }

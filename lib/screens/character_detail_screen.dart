@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import '../models/character.dart';
+import '../models/character.dart'; // Asegúrate de que Personaje tiene una propiedad 'id'
+import '../models/transformation.dart';
+import '../services/transformacion_service.dart';
 
 class CharacterDetailScreen extends StatefulWidget {
   final Personaje personaje;
@@ -20,9 +22,14 @@ class _CharacterDetailScreenState extends State<CharacterDetailScreen>
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
 
+  List<Transformacion> _transformations =
+      []; // Usamos Transformacion como en el modelo
+  bool _isLoading = true;
+
   @override
   void initState() {
     super.initState();
+
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 300),
@@ -32,6 +39,33 @@ class _CharacterDetailScreenState extends State<CharacterDetailScreen>
       curve: Curves.easeOutBack,
     );
     _controller.forward();
+
+    // Llama a la función que carga las transformaciones del personaje específico
+    _loadTransformations();
+  }
+
+  void _loadTransformations() async {
+    setState(() {
+      _isLoading = true; // Mostrar indicador de carga antes de la petición
+    });
+    try {
+      // !!! Llamamos al NUEVO método pasando el ID del personaje !!!
+      final data = await TransformacionService().fetchTransformaciones();
+      setState(() {
+        _transformations = data;
+        _isLoading = false;
+      });
+    } catch (e) {
+      print(
+        'Error loading transformations for character ${widget.personaje.id}: $e',
+      ); // Imprimir error
+      setState(() {
+        _transformations =
+            []; // En caso de error, mostrar lista vacía o un mensaje
+        _isLoading = false;
+      });
+      // Opcional: Mostrar un SnackBar o un mensaje de error en la UI
+    }
   }
 
   @override
@@ -68,6 +102,7 @@ class _CharacterDetailScreenState extends State<CharacterDetailScreen>
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    // La imagen principal del personaje no es el problema
                     Image.network(widget.personaje.image, height: 200),
                     const SizedBox(height: 10),
                     Text(
@@ -79,6 +114,7 @@ class _CharacterDetailScreenState extends State<CharacterDetailScreen>
                       ),
                     ),
                     const SizedBox(height: 20),
+                    // Detalles del personaje (Ki, Grupo, Descripción)
                     Text(
                       'Ki Base: ${widget.personaje.ki}',
                       style: TextStyle(
@@ -111,64 +147,89 @@ class _CharacterDetailScreenState extends State<CharacterDetailScreen>
                       textAlign: TextAlign.justify,
                       style: const TextStyle(fontSize: 14),
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Transformaciones:',
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.orange,
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        if (widget.personaje.transformations.isEmpty)
-                          const Text(
-                            'Este personaje no tiene transformaciones registradas',
-                            style: TextStyle(fontSize: 14),
-                          )
-                        else
-                          Column(
-                            children:
-                                widget.personaje.transformations.map((t) {
-                                  return Container(
-                                    margin: const EdgeInsets.symmetric(
-                                      vertical: 8,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: Colors.orange,
-                                      borderRadius: BorderRadius.circular(12),
-                                      border: Border.all(color: Colors.orange),
-                                    ),
-                                    child: ListTile(
-                                      leading: ClipRRect(
-                                        borderRadius: BorderRadius.circular(8),
-                                        child: Image.network(
-                                          t.image,
-                                          width: 50,
-                                          height: 50,
-                                          fit: BoxFit.cover,
-                                          errorBuilder:
-                                              (context, error, stackTrace) =>
-                                                  const Icon(
-                                                    Icons.broken_image,
-                                                  ),
-                                        ),
-                                      ),
-                                      title: Text(
-                                        t.name,
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                }).toList(),
-                          ),
-                      ],
-                    ),
                     const SizedBox(height: 20),
+                    // Sección de transformaciones
+                    const Text(
+                      'Transformaciones:',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.orange,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    // Mostrar estado de carga, mensaje sin transformaciones o la lista
+                    if (_isLoading)
+                      const Center(child: CircularProgressIndicator())
+                    else if (_transformations.isEmpty)
+                      const Text(
+                        // Este mensaje ahora será más preciso si la API devuelve una lista vacía para el personaje
+                        'Este personaje no tiene transformaciones registradas',
+                        style: TextStyle(fontSize: 14),
+                      )
+                    else
+                      // Mapear la lista de transformaciones obtenidas del personaje
+                      Column(
+                        children:
+                            _transformations.map((t) {
+                              return Container(
+                                margin: const EdgeInsets.symmetric(vertical: 8),
+                                decoration: BoxDecoration(
+                                  color: Color.fromARGB(
+                                    51,
+                                    255,
+                                    152,
+                                    0,
+                                  ), // Un poco de transparencia
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(color: Colors.orange),
+                                ),
+                                child: ListTile(
+                                  leading: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    // !!! Manejamos la posible nulidad de la imagen !!!
+                                    child:
+                                        (t.image.isNotEmpty) // <<< Simplificado a solo verificar si NO está vacío
+                                            ? Image.network(
+                                              t.image, // Ya no necesitas el '!' si el tipo es String no nulo
+                                              width: 50,
+                                              height: 50,
+                                              fit: BoxFit.cover,
+                                              errorBuilder:
+                                                  (
+                                                    context,
+                                                    error,
+                                                    stackTrace,
+                                                  ) => const Icon(
+                                                    Icons.broken_image,
+                                                    size: 50,
+                                                  ),
+                                            )
+                                            : const Icon(
+                                              Icons.image_not_supported,
+                                              size: 50,
+                                              color: Colors.grey,
+                                            ),
+                                  ),
+                                  title: Text(
+                                    t.name,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color:
+                                          Colors
+                                              .black87, // Color de texto para contraste
+                                    ),
+                                  ),
+                                  subtitle: Text(
+                                    'Ki: ${t.ki}', // Mostramos el Ki de la transformación
+                                    style: TextStyle(color: Colors.black54),
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                      ),
+                    const SizedBox(height: 20),
+                    // Botón de cerrar
                     ElevatedButton.icon(
                       onPressed: widget.onClose,
                       icon: const Icon(Icons.close),
