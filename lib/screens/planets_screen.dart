@@ -53,9 +53,18 @@ class _PlanetsScreenState extends State<PlanetsScreen>
         final x = radio * cos(angulo);
         final y = radio * sin(angulo);
 
+        // Tamaño planetas ajustado para evitar choque
+        double tamanioPlaneta = (MediaQuery.of(context).size.width * 0.045)
+            .clamp(28.0, 45.0);
+
+        // Reducir tamaño si es el planeta problemático (opcional, si aún lo necesitas)
+        if (planeta.name == "Templo móvil del rey") {
+          tamanioPlaneta *= 0.8; // 20% más pequeño
+        }
+
         return Positioned(
-          left: centroX + x - 30,
-          top: centroY + y - 30,
+          left: centroX + x - (tamanioPlaneta / 2),
+          top: centroY + y - (tamanioPlaneta / 2),
           child: GestureDetector(
             onTap:
                 () => Navigator.push(
@@ -69,17 +78,18 @@ class _PlanetsScreenState extends State<PlanetsScreen>
                 ClipOval(
                   child: Image.network(
                     planeta.image,
-                    width: 60,
-                    height: 60,
+                    width: tamanioPlaneta,
+                    height: tamanioPlaneta,
                     fit: BoxFit.cover,
                   ),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   planeta.name,
-                  style: const TextStyle(
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
                     color: Colors.white,
-                    fontSize: 10,
+                    fontSize: tamanioPlaneta * 0.2,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -190,7 +200,7 @@ class _PlanetsScreenState extends State<PlanetsScreen>
             title: Row(
               children: [
                 const Text('Planetas', style: TextStyle(color: Colors.black)),
-                const Spacer()
+                const Spacer(),
               ],
             ),
           ),
@@ -209,11 +219,38 @@ class _PlanetsScreenState extends State<PlanetsScreen>
                       : planetas
                           .where((p) => p.name.toLowerCase().contains(_query))
                           .toList();
+
+              // --- ORDENAMIENTO DEL "TEMPLO MÓVIL DEL REY" ---
+              Planeta? templo;
+              int? temploIndex;
+              for (int i = 0; i < filtrados.length; i++) {
+                if (filtrados[i].name == "Templo móvil del rey") {
+                  templo = filtrados[i];
+                  temploIndex = i;
+                  break;
+                }
+              }
+              if (templo != null && temploIndex != null) {
+                filtrados.removeAt(temploIndex);
+                // Insertar el templo en la posición deseada.
+                // Cambia el índice '1' para colocarlo en otra posición.
+                // El índice 0 sería el primer planeta visualmente.
+                if (filtrados.length > 0) {
+                  filtrados.insert(
+                    1,
+                    templo,
+                  ); // Insertar en la segunda posición
+                } else {
+                  filtrados.add(templo); // Si es el único planeta
+                }
+              }
+              // --- FIN DEL ORDENAMIENTO ---
+
               final total = filtrados.length;
               final centroX = constraints.maxWidth / 2;
-              final centroY = constraints.maxHeight / 2.15;
+              final centroY = constraints.maxHeight / 2.5;
               final radio =
-                  min(constraints.maxWidth, constraints.maxHeight) * 0.30;
+                  min(constraints.maxWidth, constraints.maxHeight) * 0.35;
 
               return Stack(
                 children: [
