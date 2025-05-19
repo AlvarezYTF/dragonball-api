@@ -1,19 +1,16 @@
+// Archivo: lib/widgets/card_transformaciones.dart
 import 'package:flutter/material.dart';
-import '../models/transformation.dart'; // Asegúrate de que este modelo exista y tenga 'name', 'image', 'ki'
+import '../models/transformation.dart';
 
+// Sigue siendo un StatefulWidget para manejar el estado del hover
 class TransformacionCard extends StatefulWidget {
   final Transformacion transformacion;
   final VoidCallback? onTap;
-  // Puedes mantener o eliminar estos parámetros si tu diseño de tarjeta no los usa
-  // final double? width;
-  // final double? height;
 
   const TransformacionCard({
     super.key,
     required this.transformacion,
     this.onTap,
-    // this.width,
-    // this.height,
   });
 
   @override
@@ -21,125 +18,152 @@ class TransformacionCard extends StatefulWidget {
 }
 
 class _TransformacionCardState extends State<TransformacionCard> {
-  bool _isHoveringImage = false; // Estado para el hover sobre la imagen
+  bool _isHovering = false;
+  final Duration _duration = const Duration(milliseconds: 200); // Duración de la animación
+  final double _imageScale = 1.25; // Factor de zoom para la imagen (ajusta para que sobresalga más)
+  final double _imageVerticalOffset = 25; // Cuánto se moverá la imagen hacia arriba al hacer hover (en píxeles)
 
-  // Factor de escala para el zoom de la imagen al hacer hover
-  final double _imageHoverScale = 1.2; // Ajusta este valor para el zoom de la imagen
-  // Desplazamiento vertical de la imagen al hacer hover (valor negativo para mover hacia arriba)
-  final double _imageHoverVerticalOffset = -30.0; // Ajusta este valor para controlar cuánto "sale" la imagen
-  // Duración de la animación de zoom y desplazamiento
-  final Duration _zoomDuration = const Duration(milliseconds: 200);
-
-  // Método para actualizar el estado de hover de la imagen.
-  void _setHoveringImage(bool isHovering) {
-    if (_isHoveringImage != isHovering) {
+  void _setHovering(bool isHovering) {
+    if (_isHovering != isHovering) {
       setState(() {
-        _isHoveringImage = isHovering;
+        _isHovering = isHovering;
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector( // Mantenemos GestureDetector para el onTap si lo necesitas
-      onTap: widget.onTap,
-      child: Container(
-        // La altura del Container padre puede necesitar ajuste dependiendo del GridView
-        // height: 300, // Considera si esta altura fija es adecuada en todos los casos
-        margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 6), // Ajustado el margen ligeramente
+    // Estimamos la altura necesaria para la sección de texto y padding en la parte inferior del card
+    // Este valor puede necesitar ajuste dependiendo del tamaño de fuente y padding exactos
+    const double estimatedTextSectionHeight = 60; // Altura estimada en píxeles
+
+    // Envolver el contenido principal con MouseRegion y GestureDetector
+    return MouseRegion(
+      onEnter: (_) => _setHovering(true), // Detectar entrada del ratón
+      onExit: (_) => _setHovering(false), // Detectar salida del ratón
+      child: GestureDetector( // Detectar taps
+        onTap: widget.onTap,
         child: Card(
-          color: Colors.black.withAlpha(178), // Color de fondo de la tarjeta
-          elevation: 8, // Sombra de la tarjeta
+          elevation: _isHovering ? 12 : 6, // Cambia la elevación al hacer hover
+          color: Colors.black.withAlpha(178), // Color del card
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20), // Bordes redondeados
           ),
-          // Usamos Clip.none para permitir que la imagen salga del Card
-          clipBehavior: Clip.none, // Crucial para que la imagen "salga"
+          // *** CRUCIAL: Permitir que el contenido (la imagen) se salga de los límites del Card ***
+          clipBehavior: Clip.none, // <--- Cambiado de Clip.antiAlias a Clip.none
 
-          child: Stack( // Usamos Stack para superponer la imagen y el texto
-            // Alineación del Stack. Puede ajustarse si es necesario.
-            alignment: Alignment.bottomCenter,
+          // Usamos un Stack para poner la imagen y el texto en capas separadas
+          child: Stack(
+            clipBehavior: Clip.none, // Permitir que los hijos del Stack sobresalgan
+            alignment: Alignment.topCenter, // Alinear hijos desde la parte superior por defecto
+
             children: [
-              // Área de la imagen con detección de hover, animación de zoom y desplazamiento
-              Positioned( // Posiciona la imagen dentro del Stack
-                // La posición top se ajusta con el desplazamiento al hacer hover
-                top: _isHoveringImage ? _imageHoverVerticalOffset : 0.0,
-                left: 0,
-                right: 0,
-                // La altura será determinada por el AspectRatio y el espacio disponible
-                child: MouseRegion( // Detecta eventos de puntero sobre la imagen
-                  onEnter: (_) => _setHoveringImage(true), // Cuando el puntero entra
-                  onExit: (_) => _setHoveringImage(false), // Cuando el puntero sale
-                  child: AnimatedScale( // Aplica la animación de escala a la imagen
-                    scale: _isHoveringImage ? _imageHoverScale : 1.0, // Factor de zoom de la imagen
-                    duration: _zoomDuration, // Duración de la animación
-                    curve: Curves.easeInOut, // Curva de la animación
-                    child: AspectRatio( // Mantiene la proporción de la imagen
-                       // Ajusta este valor si las imágenes tienen una proporción diferente
-                      aspectRatio: 0.8, // Relación de aspecto ajustada para que el personaje se vea más completo
-                      child: Image.network( // O Image.asset si la imagen es local
-                        widget.transformacion.image, // Usar la propiedad 'image' de tu modelo
-                        fit: BoxFit.contain, // Mantiene la imagen completa dentro de su espacio
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            color: Colors.grey[900],
-                            child: const Center(
-                              child: Icon(Icons.error_outline, size: 40, color: Colors.white54),
-                            ),
-                          );
-                        },
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return Center(
-                            child: CircularProgressIndicator(
-                              value: loadingProgress.expectedTotalBytes != null
-                                  ? loadingProgress.cumulativeBytesLoaded /
-                                      loadingProgress.expectedTotalBytes!
-                                  : null,
-                              color: Colors.yellowAccent, // Color del indicador de carga
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              // Área de texto (nombre y Base KI) - Posicionada en la parte inferior
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                 // Agregado un Container para un fondo semi-transparente para el texto
-                child: Container(
-                  padding: const EdgeInsets.all(10), // Padding alrededor del texto
-                  color: Colors.black54.withOpacity(0.7), // Fondo semi-transparente
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start, // Alinea el texto a la izquierda
-                    mainAxisSize: MainAxisSize.min, // La columna ocupa el mínimo espacio vertical necesario
+               // --- El contenido NO-imagen (texto y fondo del card) ---
+               // Este Container da la forma del card. El texto se posiciona dentro.
+               Container(
+                 decoration: BoxDecoration(
+                    color: Colors.black.withAlpha(178), // Color de fondo si el Stack necesita uno
+                    borderRadius: BorderRadius.circular(20), // Mismos bordes del card
+                 ),
+                 // Usamos un Column para que el espacio Expanded empuje el texto hacia abajo
+                 child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Text(
-                        widget.transformacion.name, // Nombre de la transformación
-                        style: const TextStyle(
-                          color: Colors.white, // Color de texto
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        maxLines: 1, // Limita el nombre a una línea
-                        overflow: TextOverflow.ellipsis, // Añade puntos suspensivos si el nombre es muy largo
-                      ),
-                      const SizedBox(height: 4), // Espacio entre el nombre y el Base KI
-                      Text(
-                        // Usamos widget.transformacion.ki para obtener el Base KI
-                        'Base KI: ${widget.transformacion.ki}', // Usar la propiedad 'ki' de tu modelo
-                        style: const TextStyle(color: Colors.yellowAccent), // Color de texto
-                        maxLines: 1, // Limita el Base KI a una línea
-                        overflow: TextOverflow.ellipsis, // Añade puntos suspensivos si es muy largo
-                      ),
+                      // Espacio flexible para la imagen arriba (invisible)
+                      Expanded(child: Container()),
+
+                      // La sección de detalles de la transformación (Nombre, Ki, etc.)
+                       Padding(
+                         padding: const EdgeInsets.all(10),
+                         child: Column(
+                           crossAxisAlignment: CrossAxisAlignment.start,
+                           children: [
+                             Text(
+                               widget.transformacion.name,
+                               style: const TextStyle(
+                                 color: Colors.white,
+                                 fontSize: 16,
+                                 fontWeight: FontWeight.bold,
+                               ),
+                               maxLines: 1,
+                               overflow: TextOverflow.ellipsis,
+                             ),
+                             const SizedBox(height: 4),
+                             Text(
+                               'Base KI: ${widget.transformacion.ki}',
+                               style: const TextStyle(color: Colors.yellowAccent),
+                               maxLines: 1,
+                               overflow: TextOverflow.ellipsis,
+                             ),
+                           ],
+                         ),
+                       ),
                     ],
-                  ),
-                ),
+                 ),
+               ),
+
+              // --- La imagen del personaje (posicionada encima y animada) ---
+              // Posicionamos la imagen en el área superior.
+              Positioned(
+                 top: 0,
+                 left: 0,
+                 right: 0,
+                 // La parte inferior de la imagen se define relative a la altura del texto estimado.
+                 // Esto necesita ajuste si la altura real del texto varía.
+                 bottom: estimatedTextSectionHeight, // Position bottom edge just above text section
+
+                 child: AnimatedScale( // Aplicar escala animation
+                   scale: _isHovering ? _imageScale : 1.0,
+                   duration: _duration,
+                   curve: Curves.easeInOut,
+                   // *** CORREGIDO: Reemplazar AnimatedSlide con TweenAnimationBuilder + Transform.translate ***
+                   child: TweenAnimationBuilder<Offset>( // Animar el offset de traslación
+                     tween: Tween<Offset>(
+                       begin: Offset.zero, // Inicia en la posición normal
+                       end: _isHovering ? Offset(0, -_imageVerticalOffset) : Offset.zero, // Mueve hacia arriba por la cantidad de píxeles definida
+                     ),
+                     duration: _duration, // Usar la duración de la animación general
+                     curve: Curves.easeInOut, // Usar la misma curva de animación
+                     builder: (context, offset, child) {
+                       return Transform.translate( // Aplica la traslación a la imagen
+                         offset: offset, // Usar el valor de offset animado
+                         child: child!, // El hijo (Center -> Image.network) se pasa aquí
+                       );
+                     },
+                     // El child de TweenAnimationBuilder es el widget que se animará
+                     child: Center( // Centrar la imagen horizontalmente en su área
+                       child: Image.network(
+                         widget.transformacion.image,
+                         fit: BoxFit.contain, // Usar contain para que el personaje completo sea visible
+                         errorBuilder: (context, error, stackTrace) {
+                           return Container(
+                             color: Colors.grey[900],
+                             child: const Center(
+                               child: Icon(Icons.error_outline, size: 40, color: Colors.white54),
+                             ),
+                           );
+                         },
+                         loadingBuilder: (context, child, loadingProgress) {
+                           if (loadingProgress == null) return child;
+                           return Center(
+                             child: CircularProgressIndicator(
+                               value: loadingProgress.expectedTotalBytes != null
+                                   ? loadingProgress.cumulativeBytesLoaded /
+                                       loadingProgress.expectedTotalBytes!
+                                   : null,
+                             ),
+                           );
+                         },
+                       ),
+                     ),
+                   ),
+                 ),
               ),
+
+               // --- Capa transparente para capturar el hover en toda el área del card ---
+               // Esto asegura que el MouseRegion detecte el hover aunque el ratón no esté directamente sobre la imagen
+               Positioned.fill(child: Container(color: Colors.transparent)),
+
             ],
           ),
         ),
